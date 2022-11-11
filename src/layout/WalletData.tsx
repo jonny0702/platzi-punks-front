@@ -34,7 +34,7 @@ export const WalletData = () => {
     deactivate();
     localStorage.removeItem("previousConnected")
   }
-  
+
   const getBallance = useCallback( async ()=>{
     //with library of useWeb3React is the instance of Web3 Library
     // so we can use the methods of web3 in React
