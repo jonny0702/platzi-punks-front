@@ -6,37 +6,72 @@ import {
   Button,
   Image,
   Badge,
+  useToast
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
 import { usePlatziPunks } from "../../hooks/usePlatziPunks";
 import { useCallback, useEffect, useState } from "react";
 export const Home = () => {
-  const [availablePunks, setAvailablePunks] = useState<string>('')
-  const [punkImage, setPunkImage] = useState<string>('')
+  const [isMinting, setIsMinting] = useState<boolean>(false);
+  const [availablePunks, setAvailablePunks] = useState<string>("");
+  const [punkImage, setPunkImage] = useState<string>("");
   const { active, account } = useWeb3React();
+  const toast = useToast()
   const platziPunks = usePlatziPunks();
 
   //getNFTdata
-  const getPlatziPunkData = useCallback(async () =>{
-    if(platziPunks){
+  const getPlatziPunkData = useCallback(async () => {
+    if (platziPunks) {
       const maxSupply = await platziPunks.methods.maxSupply().call();
       const totalSupply = await platziPunks.methods.totalSupply().call();
-      const DNAPreview = await platziPunks.methods._deterministicPesudoRandomDNA(totalSupply, account).call();
-      const image = await platziPunks.methods.returnImageByDNA(DNAPreview).call()
-      setAvailablePunks((maxSupply - totalSupply).toFixed(0))
-      setPunkImage(image)
+      const DNAPreview = await platziPunks.methods
+        ._deterministicPesudoRandomDNA(totalSupply, account)
+        .call();
+      const image = await platziPunks.methods
+        .returnImageByDNA(DNAPreview)
+        .call();
+      setAvailablePunks((maxSupply - totalSupply).toFixed(0));
+      setPunkImage(image);
     }
-  }, [platziPunks])
+  }, [platziPunks]);
 
+  const handleMint = () => {
+    setIsMinting(true);
+    platziPunks.methods
+      .mint()
+      .send({
+        from: account,
+      })
+      .on("transactionHash", (txHash: string)=>{
+        toast({
+          title: 'Transaction Sent',
+          description: txHash,
+          status: 'info'
+        })
+      })
+      .on("receipt", ()=>{
+        setIsMinting(false)
+        toast({
+          title: 'Transaction Confirmed',
+          description: 'Your Punk is Ready ✅',
+          status: 'success'
+        })
+        getPlatziPunkData()
+      })
+      .on("error", (error: Error)=>{
+        setIsMinting(false)
+        toast({
+          title: 'transaction Error',
+          description: error.message,
+          status: 'error'
+        })
+      });
+  };
 
-  const handleMint = () =>{
-    
-  }
-
-  useEffect(()=>{
-    getPlatziPunkData()
-  }, [getPlatziPunkData])
+  useEffect(() => {
+    getPlatziPunkData();
+  }, [getPlatziPunkData]);
 
   return (
     <Stack
@@ -59,7 +94,7 @@ export const Home = () => {
               width: "full",
               height: "30%",
               position: "absolute",
-              bottom: 1, 
+              bottom: 1,
               left: 0,
               bg: "green.400",
               zIndex: -1,
@@ -95,6 +130,8 @@ export const Home = () => {
             bg={"green.400"}
             _hover={{ bg: "green.500" }}
             disabled={!platziPunks}
+            onClick={handleMint}
+            isLoading={isMinting}
           >
             Obtén tu punk
           </Button>
@@ -130,17 +167,13 @@ export const Home = () => {
                 </Badge>
               </Badge>
               <Badge ml={2}>
-              availablePunks:
+                availablePunks:
                 <Badge ml={1} colorScheme="green">
                   {availablePunks}
                 </Badge>
               </Badge>
             </Flex>
-            <Button
-              mt={4}
-              size="xs"
-              colorScheme="green"
-            >
+            <Button mt={4} size="xs" colorScheme="green">
               Actualizar
             </Button>
           </>
