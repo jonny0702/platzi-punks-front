@@ -25,11 +25,9 @@ export const Home = () => {
     if (platziPunks) {
       const maxSupply = await platziPunks.methods.maxSupply().call();
       const totalSupply = await platziPunks.methods.totalSupply().call();
-      const DNAPreview = await platziPunks.methods
-        ._deterministicPesudoRandomDNA(totalSupply, account)
-        .call();
+      const getRandomNumber = await platziPunks.methods.tokenDNA(totalSupply).call()
       const image = await platziPunks.methods
-        .returnImageByDNA(DNAPreview)
+        .returnImageByDNA(getRandomNumber)
         .call();
       setAvailablePunks((maxSupply - totalSupply).toFixed(0));
       setPunkImage(image);
@@ -39,7 +37,7 @@ export const Home = () => {
   const handleMint = () => {
     setIsMinting(true);
     platziPunks.methods
-      .mint()
+      .mint(process.env.REACT_APP_CONSUMER_ADDRESS)
       .send({
         from: account,
       })
@@ -62,7 +60,7 @@ export const Home = () => {
       .on("error", (error: Error)=>{
         setIsMinting(false)
         toast({
-          title: 'transaction Error',
+          title: 'transaction Error ❌',
           description: error.message,
           status: 'error'
         })

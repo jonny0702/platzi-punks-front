@@ -28,8 +28,8 @@ const getPunkData = async ({ platziPunks, tokenId }: any) => {
     platziPunks.methods.tokenURI(tokenId).call(),
     platziPunks.methods.tokenDNA(tokenId).call(),
     platziPunks.methods.ownerOf(tokenId).call(),
-    platziPunks.methods.getAccesoriesType(tokenId).call(),
-    platziPunks.methods.getAccesoriesType(tokenId).call(),
+    platziPunks.methods.getAccessoriesType(tokenId).call(),
+    platziPunks.methods.getAccessoriesType(tokenId).call(),
     platziPunks.methods.getClotheColor(tokenId).call(),
     platziPunks.methods.getClotheType(tokenId).call(),
     platziPunks.methods.getEyeType(tokenId).call(),
@@ -86,9 +86,9 @@ export const usePlatziPunksData = () => {
       tokenIds  = new Array(Number(totalSupply)).fill(null).map((_, index)=> index);
 
       const punksPromise = tokenIds.map((tokenId) => getPunkData({tokenId, platziPunks}))
-      console.log(punksPromise)
       const punks = await Promise.all(punksPromise)
       setPunks(punks)
+      setLoading(false)
     }
   },[platziPunks])
 
@@ -102,3 +102,35 @@ export const usePlatziPunksData = () => {
     update
   }
 };
+
+// get a specific Platzi Punk
+type tokenID = string | null;
+
+export const usePlatziPunkData = (tokenId: tokenID = null) =>{
+  const [punk, setPunk] = useState<any>({})
+  const [loading, setLoading] = useState<boolean>(true)
+
+  const platziPunks = usePlatziPunks();
+
+  const update= useCallback(async()=>{
+    if(platziPunks && tokenId != null){
+      setLoading(true)  
+
+      const toSetPunk = await getPunkData({tokenId, platziPunks})
+      setPunk(toSetPunk)
+
+      setLoading(false)
+    }
+  },[platziPunks, tokenId]);
+  
+  useEffect(()=>{
+    update()
+  },[update]);
+
+  return{
+    loading,
+    punk,
+    update
+  }
+
+}
