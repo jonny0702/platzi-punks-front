@@ -1,7 +1,6 @@
-
 export const PlatziPunksArtifact = {
   address: {
-    5: process.env.REACT_APP_CONTRACT_ADDRESS
+    5: process.env.REACT_APP_CONTRACT_ADDRESS,
   },
   abi: [
     {
@@ -152,14 +151,27 @@ export const PlatziPunksArtifact = {
       type: "function",
     },
     {
-      inputs: [
+      inputs: [],
+      name: "contractRandomize",
+      outputs: [
         {
-          internalType: "uint8",
-          name: "_dna",
-          type: "uint8",
+          internalType: "contract VRFv2Consumer",
+          name: "",
+          type: "address",
         },
       ],
-      name: "getAccesoriesType",
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          internalType: "uint256",
+          name: "_dna",
+          type: "uint256",
+        },
+      ],
+      name: "getAccessoriesType",
       outputs: [
         {
           internalType: "string",
@@ -192,9 +204,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getClotheColor",
@@ -211,9 +223,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getClotheType",
@@ -230,9 +242,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getEyeBrowType",
@@ -249,9 +261,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getEyeType",
@@ -268,9 +280,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getFacialHairColor",
@@ -287,9 +299,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getFacialHairType",
@@ -306,9 +318,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getGraphicType",
@@ -325,9 +337,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getHairColor",
@@ -344,9 +356,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getHatColor",
@@ -363,9 +375,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getMouthType",
@@ -382,9 +394,46 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
+          name: "_requestId",
+          type: "uint256",
+        },
+      ],
+      name: "getRandomValues",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "fulfilled",
+          type: "bool",
+        },
+        {
+          internalType: "uint256[]",
+          name: "randomWords",
+          type: "uint256[]",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "getRequestId",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getSkinColor",
@@ -401,9 +450,9 @@ export const PlatziPunksArtifact = {
     {
       inputs: [
         {
-          internalType: "uint8",
+          internalType: "uint256",
           name: "_dna",
-          type: "uint8",
+          type: "uint256",
         },
       ],
       name: "getTopType",
@@ -455,7 +504,13 @@ export const PlatziPunksArtifact = {
       type: "function",
     },
     {
-      inputs: [],
+      inputs: [
+        {
+          internalType: "address",
+          name: "_contractConsumerAdd",
+          type: "address",
+        },
+      ],
       name: "mint",
       outputs: [],
       stateMutability: "payable",

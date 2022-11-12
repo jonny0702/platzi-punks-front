@@ -6,7 +6,16 @@ import {
   Image,
 } from "@chakra-ui/react";
 
-export const PunkCard = () => {
+interface PunkCardProps {
+  name: string;
+  image: string;
+  mx?:{
+    base: string,
+    md: number
+  }
+}
+
+export const PunkCard:React.FC<PunkCardProps> = ({ name, image, ...props }) => {
   return (
     <Box
       role={"group"}
@@ -18,6 +27,7 @@ export const PunkCard = () => {
       rounded={"lg"}
       pos={"relative"}
       zIndex={1}
+      {...props}
     >
       <Box
         rounded={"lg"}
@@ -31,7 +41,7 @@ export const PunkCard = () => {
           pos: "absolute",
           top: 0,
           left: 0,
-          backgroundImage: `url(${''})`,
+          backgroundImage: `url(${""})`,
           filter: "blur(15px)",
           zIndex: -1,
         }}
@@ -46,12 +56,12 @@ export const PunkCard = () => {
           height={230}
           width={282}
           objectFit={"cover"}
-          src={''}
+          src={image}
         />
       </Box>
       <Stack pt={10} align={"center"}>
         <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
-          {'Punk'}
+          {name}
         </Heading>
       </Stack>
     </Box>
