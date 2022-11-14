@@ -85,7 +85,7 @@ export const Punks = () => {
       {loading ? (
         <Loading />
       ) : (
-        <Grid templateColumns="repeat(auto-fill, minmax(250px, 1f))" gap={6}>
+        <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={6}>
           {punks.map(({ name, image, tokenId }: any) => (
             <Link key={tokenId} to={`/punks/${tokenId}`}>
               <PunkCard name={name} image={image} />
