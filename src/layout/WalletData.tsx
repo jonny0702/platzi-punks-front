@@ -57,13 +57,13 @@ export const WalletData = () => {
       {active ? (
         <Tag colorScheme="green" borderRadius="full">
           <TagLabel>
-            <Link to="/punks">{cutAddress}</Link>
+            <Link to={`/punks?address=${account}`}>{cutAddress}</Link>
           </TagLabel>
           <Badge
-            // d={{
-            //   base: "none",
-            //   md: "block",
-            // }}
+            display={{
+              base: "none",
+              md: "block",
+              }}
             variant="solid"
             fontSize="0.8rem"
             ml={1}

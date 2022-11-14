@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { usePlatziPunks } from './usePlatziPunks';
+import { useWeb3React } from "@web3-react/core";
+import { useState, useEffect, useCallback } from "react";
+import { usePlatziPunks } from "./usePlatziPunks";
 
 /**
  *
@@ -71,66 +72,81 @@ const getPunkData = async ({ platziPunks, tokenId }: any) => {
 };
 
 // Plural get All punks created
-export const usePlatziPunksData = () => {
-  const [punks, setPunks] = useState<any>([])
-  const [loading, setLoading] = useState(true)
+export const usePlatziPunksData = ({ owner = null } = {}) => {
+  const [punks, setPunks] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const { library } = useWeb3React();
 
   const platziPunks = usePlatziPunks();
 
-  const update= useCallback(async()=>{
-    if(platziPunks){
-      setLoading(true)
+  const update = useCallback(async () => {
+    if (platziPunks) {
+      setLoading(true);
 
-      let tokenIds;
-      const totalSupply = await platziPunks.methods.totalSupply().call();
-      tokenIds  = new Array(Number(totalSupply)).fill(null).map((_, index)=> index);
+      let tokenIds: number[];
 
-      const punksPromise = tokenIds.map((tokenId) => getPunkData({tokenId, platziPunks}))
-      const punks = await Promise.all(punksPromise)
-      setPunks(punks)
-      setLoading(false)
+      if(!library.utils.isAddress(owner)){
+        const totalSupply = await platziPunks.methods.totalSupply().call();
+        tokenIds = new Array(Number(totalSupply))
+          .fill(null)
+          .map((_, index) => index);
+      }else{
+        const balanceOf = await platziPunks.methods.balanceOf(owner).call();
+
+        const tokenIdOfOwner  = new Array(balanceOf).fill(null).map((_, index) =>(
+          platziPunks.methods.tokenOfOwnerByIndex(owner, index).call()
+        ))
+        tokenIds = await Promise.all(tokenIdOfOwner)
+      }
+
+      const punksPromise = tokenIds.map((tokenId: number) =>
+        getPunkData({ tokenId, platziPunks })
+      );
+
+      const punks = await Promise.all(punksPromise);
+      setPunks(punks);
+      setLoading(false);
     }
-  },[platziPunks])
+  }, [platziPunks, owner, library?.utils]);
 
-  useEffect(()=>{
-    update()
-  },[update]);
+  useEffect(() => {
+    update();
+  }, [update]);
 
-  return{
+  return {
     loading,
     punks,
-    update
-  }
+    update,
+  };
 };
 
 // get a specific Platzi Punk
 type tokenID = string | null;
 
-export const usePlatziPunkData = (tokenId: tokenID = null) =>{
-  const [punk, setPunk] = useState<any>({})
-  const [loading, setLoading] = useState<boolean>(true)
+export const usePlatziPunkData = (tokenId: tokenID = null) => {
+  const [punk, setPunk] = useState<any>({});
+  const [loading, setLoading] = useState<boolean>(true);
 
   const platziPunks = usePlatziPunks();
 
-  const update= useCallback(async()=>{
-    if(platziPunks && tokenId != null){
-      setLoading(true)  
+  const update = useCallback(async () => {
+    if (platziPunks && tokenId != null) {
+      setLoading(true);
 
-      const toSetPunk = await getPunkData({tokenId, platziPunks})
-      setPunk(toSetPunk)
+      const toSetPunk = await getPunkData({ tokenId, platziPunks });
+      setPunk(toSetPunk);
 
-      setLoading(false)
+      setLoading(false);
     }
-  },[platziPunks, tokenId]);
-  
-  useEffect(()=>{
-    update()
-  },[update]);
+  }, [platziPunks, tokenId]);
 
-  return{
+  useEffect(() => {
+    update();
+  }, [update]);
+
+  return {
     loading,
     punk,
-    update
-  }
-
-}
+    update,
+  };
+};
