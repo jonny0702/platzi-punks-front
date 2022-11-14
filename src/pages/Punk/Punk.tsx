@@ -116,8 +116,8 @@ export const Punk: React.FC = () => {
         <Table size="sm" variant="simple">
           <Thead>
             <Tr>
-              <Th>Atributo</Th>
-              <Th>Valor</Th>
+              <Th>Attribute</Th>
+              <Th>Value</Th>
             </Tr>
           </Thead>
           <Tbody>
