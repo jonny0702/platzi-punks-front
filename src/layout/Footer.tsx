@@ -18,7 +18,7 @@ export const Footer = () => {
         borderStyle={"solid"}
         borderColor={useColorModeValue("gray.200", "gray.700")}
       >
-        <Container
+        {/* <Container
           as={Stack}
           maxW={"6xl"}
           py={4}
@@ -33,7 +33,7 @@ export const Footer = () => {
               Pablo Stanley 🎨
             </Link>
           </Text>
-        </Container>
+        </Container> */}
       </Box>
     </Box>
   );
