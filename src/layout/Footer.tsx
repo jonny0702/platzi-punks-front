@@ -18,22 +18,22 @@ export const Footer = () => {
         borderStyle={"solid"}
         borderColor={useColorModeValue("gray.200", "gray.700")}
       >
-        {/* <Container
-          as={Stack}
+        <Container
+          as={Stack as any}
           maxW={"6xl"}
           py={4}
           direction={{ base: "column", md: "row" }}
-          spacing={4}
+          spacing={'4'}
           justify={{ base: "center", md: "space-between" }}
           align={{ base: "center", md: "center" }}
         >
           <Text>
-            © {new Date().getFullYear()} Original designs by
+          © {new Date().getFullYear()} Original designs by
             <Link ml={1} href="https://twitter.com/pablostanley">
               Pablo Stanley 🎨
             </Link>
           </Text>
-        </Container> */}
+        </Container>
       </Box>
     </Box>
   );
